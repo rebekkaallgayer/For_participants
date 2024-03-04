@@ -11,6 +11,7 @@ setwd() #this is the path to where you have stored the data
 
 #Import the ‘squid1.txt’ file into R using the read.table() function and assign it to a variable named squid. 
 squid <- read.table("squid1.txt", header=T)
+#if you get errors here, you might not have set the working directory properly, ask a neighbour or raise your hand!
 
 #These data were originally collected as part of a study published in Aquatic Living Resources1 in 2005. 
 #The aim of the study was to investigate the seasonal patterns of investment in somatic and reproductive tissues 
@@ -24,11 +25,11 @@ squid <- read.table("squid1.txt", header=T)
 
 #Use the str() function to display the structure of the dataset and the summary() function to summarise the dataset. 
 
-str(squid)
-
-summary(squid)
+str(squid) #this gives you all the column names and the data type in each column
+#squid is a dataframe, which means it can hold different types of data
 #How many observations are in this dataset? How many variables? 
-
+summary(squid)
+#this gives you the ranges of each column
 
 #The year, month and maturity.stage variables were coded as integers in the original dataset. 
 #Here we would like to code them as factors. 
@@ -42,7 +43,7 @@ squid$maturity.stage_f <- as.factor(squid$maturity.stage)
 
 #Use the str() function again to check the coding of these new variables.
 str(squid)
-
+#now the new columns have the type 'Factor'
 
 ############DOTCHARTS ############
 #The humble cleveland dotplot is a great way of identifying if you have potential outliers in continuous variables. 
@@ -56,11 +57,18 @@ dotchart(squid$ovary.weight)
 
 #it looks like nid.length does! this turned out to be a recording error, and we can fix it
 which(squid$nid.length > 400) #this gives the row of the value that is the outlier
+#the which() function goes through the data and asks which values meet the condition of >400, it will output the row number where this is true
 squid$nid.length[11]
 #then we can go in and change it
-squid$nid.length[11] <- 43.2
+squid$nid.length[11] <- 43.2 #use the <- symbol to assign a new value
 #see if it worked
-dotchart(squid$nid.length)
+dotchart(squid$nid.length) #yes! the outlier is gone
+
+
+#anytime you want to know what you can change in a function, go into the console window and type ? then the function
+?dotchart
+#it will open the help window with all of the details about that function
+#you then change the arguments from their default values by adding them to the function call
 
 #you can play with different things like colours
 dotchart(squid$DML, col="blue")
@@ -70,16 +78,19 @@ dotchart(squid$DML, pch=16)
 
 #combine the two
 dotchart(squid$DML, pch=16, col="blue")
-
 #you can find all the pch values here: http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r
 
 
 #If you prefer to create a single figure with all 4 plots you can always split your plotting device into 2 rows and 2 columns. 
-par(mfrow=c(2,2))
+par(mfrow=c(2,2)) #this tells it that I wand 2 rows and 2 columns
+#par sets graphical parameters
+
 dotchart(squid$DML, main="DML")
 dotchart(squid$weight, main="Weight")
 dotchart(squid$nid.length, main="nid.length")
 dotchart(squid$ovary.weight, main="ovary weight")
+
+#so it plots 4 figures in one page
 
 
 #########HISTOGRAMS########
@@ -115,7 +126,7 @@ boxplot(DML ~ maturity.stage_f, data = squid, ylab = "DML", xlab = "Maturity sta
 #The dotted vertical lines are called the whiskers and their length is determined as 1.5 x the inter quartile range. 
 #Data points that are plotted outside the the whiskers represent potential unusual observations. 
 
-
+###### SIMPLE LINEAR MODELS######
 ##linear models if you're looking at relationships
 ## this is a linear relationship of the format y=mx+b
 lm1 <- lm(weight ~ DML, data=squid) #this format is response variable ~ explanatory variable, so y ~ x
@@ -127,14 +138,14 @@ summary(lm1)
 plot(weight ~ DML, data=squid)
 lines(x=squid$DML, y=summary(lm1)$coefficients[1] +summary(lm1)$coefficients[2]*squid$DML, col="red")
 mtext(paste("Adj R2= ", round(summary(lm1)$adj.r.squared,digits=2) ,sep=""), side=1, line=-2, adj=1)
-#the R2 value measures how well the linear model predicts the real data
+#the R2 value measures how well the linear model predicts the real data, it's pretty good!
 
 #it is always important to inspect the diagnostics plots for your linear models to make sure you are not violating any assumptions
 par(mfrow=c(2,2))
 plot(lm1)
 
 #the top left plot is testing whether the residuals exhibit non-linear patterns, we want it to be roughly horizontal
-#the top right plot is testing whether the residuals are normally distributed
+#the top right plot is testing whether the residuals are normally distributed, so we want the points to follow the diagonal line
 #the bottom left plot is testing equal variance, if the red line is about horizontal, then assumption of equal variance is met
 #the bottom right plot is looking at influential values, so if any values fall outside of Cook's distance, it is an influential data point
 
@@ -148,7 +159,7 @@ plot(lm1)
 #One approach to linearising relationships is to apply a transformation on one or both variables. 
 #Try transforming the weight variable with either a natural log (log()) or square root (sqrt()) transformation. 
 #I suggest you create new variables in the squid dataframe for your transformed variables
-squid$weight_log <- log(squid$weight)
+squid$weight_log <- log(squid$weight) #apply the log() transformation
 par(mfrow=c(1,1))
 plot(x=squid$DML, y=squid$weight_log)
 #that looks a bit different!
@@ -166,7 +177,7 @@ plot(lm2)
 squid$weight_sqrt <- sqrt(squid$weight)
 par(mfrow=c(1,1))
 plot(x=squid$DML, y=squid$weight_sqrt)
-#that looks a bit different!
+#that looks a bit different again!
 
 #let's try the lm again
 lm3 <- lm(weight_sqrt ~ DML, data=squid)
@@ -178,7 +189,7 @@ plot(lm3)
 #this might be the best transformation so let's plot the data with the linear model
 par(mfrow=c(1,1))
 plot(weight_sqrt ~ DML, data=squid)
-lines(x=squid$DML, y=summary(lm3)$coefficients[1] +summary(lm3)$coefficients[2]*squid$DML, col="red")
+lines(x=squid$DML, y=summary(lm3)$coefficients[1] +summary(lm3)$coefficients[2]*squid$DML, col="red") #the y variable here is just mx+b!
 mtext(paste("Adj R2= ", round(summary(lm3)$adj.r.squared,digits=2) ,sep=""), side=1, line=-2, adj=1)
 
 
@@ -188,17 +199,18 @@ install.packages("ggplot2")
 library("ggplot2")
 
 hist_figure <- ggplot(squid, aes(x=DML)) + #we name our plot so that we can call it at any time
-  #the + here is very important! This is how you add elements to your plot
-  geom_histogram() + #so here, we are saying "make a ggplot object" AND create a histogram from the data
-  labs(title="DML", x="DML", y="Frequency")
-  
+                                           #the + here is very important! This is how you add elements to your plot
+  geom_histogram() +                        #so here, we are saying "make a ggplot object" AND create a histogram from the data
+  labs(title="DML", x="DML", y="Frequency") #AND give it particular labels
 
+#this is how you build up a ggplot object, piece by piece
+  
 plot(hist_figure)
 
 #you can make multiple histograms for DML by maturity stage
-hist_4 <- hist_figure + #and now we can take the data from figure1 AND add the multiple panels
+hist_4 <- hist_figure +                     #and now we can take the data from figure1 AND add the multiple panels
   facet_wrap(~ maturity.stage_f, nrow = 2) +
-  theme_minimal() #this removes the grey background
+  theme_minimal()                           #AND remove the grey background
 
 plot(hist_4)
 
