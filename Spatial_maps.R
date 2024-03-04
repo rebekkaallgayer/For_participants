@@ -10,9 +10,9 @@ library("ggplot2")
 #set your working directory
 setwd() #this is the path to where you have stored the data
 #for example, if you saved your data in Documents/workshop, your path would be "C:\Documents\workshop"
-setwd("C:/Users/Rey/Documents/Indonesia workshop/")
+setwd("C:/Users/Rey/Documents/Indonesia workshop/For_participants/")
 
-##read in a shape file and plot in terra?
+##read in a shape file and plot in terra
 #the map of Indonesia came from https://gadm.org/download_country.html
 
 indo_0 <- vect("gadm41_IDN_shp/gadm41_IDN_0.shp") 

@@ -10,7 +10,7 @@ setwd() #this is the path to where you have stored the data
 
 
 #Import the ‘squid1.txt’ file into R using the read.table() function and assign it to a variable named squid. 
-squid <- read.table("all_data/data/squid1.txt", header=T)
+squid <- read.table("squid1.txt", header=T)
 
 #These data were originally collected as part of a study published in Aquatic Living Resources1 in 2005. 
 #The aim of the study was to investigate the seasonal patterns of investment in somatic and reproductive tissues 
@@ -114,6 +114,72 @@ boxplot(DML ~ maturity.stage_f, data = squid, ylab = "DML", xlab = "Maturity sta
 #The distance between the upper and lower quartiles is known as the inter quartile range and represents the values of weight for 50% of the data. 
 #The dotted vertical lines are called the whiskers and their length is determined as 1.5 x the inter quartile range. 
 #Data points that are plotted outside the the whiskers represent potential unusual observations. 
+
+
+##linear models if you're looking at relationships
+## this is a linear relationship of the format y=mx+b
+lm1 <- lm(weight ~ DML, data=squid) #this format is response variable ~ explanatory variable, so y ~ x
+summary(lm1)
+#under coefficients, your (Intercept) Estimate is your b (-407.71171)
+#and your DML estimate is your slope (m), (3.23068)
+
+#let's see how it looks on top of our data
+plot(weight ~ DML, data=squid)
+lines(x=squid$DML, y=summary(lm1)$coefficients[1] +summary(lm1)$coefficients[2]*squid$DML, col="red")
+mtext(paste("Adj R2= ", round(summary(lm1)$adj.r.squared,digits=2) ,sep=""), side=1, line=-2, adj=1)
+#the R2 value measures how well the linear model predicts the real data
+
+#it is always important to inspect the diagnostics plots for your linear models to make sure you are not violating any assumptions
+par(mfrow=c(2,2))
+plot(lm1)
+
+#the top left plot is testing whether the residuals exhibit non-linear patterns, we want it to be roughly horizontal
+#the top right plot is testing whether the residuals are normally distributed
+#the bottom left plot is testing equal variance, if the red line is about horizontal, then assumption of equal variance is met
+#the bottom right plot is looking at influential values, so if any values fall outside of Cook's distance, it is an influential data point
+
+#the residuals are the differences between the real data point and the line of the linear model
+
+#these plots don't look quite right
+#top left is not horizontal, and bottom left is not horizontal
+#the Normal QQ plot looks a little bit off, the points should follow the dotted line (although in real data, it is rare that this is perfect!)
+
+#let's see if we can linearise it
+#One approach to linearising relationships is to apply a transformation on one or both variables. 
+#Try transforming the weight variable with either a natural log (log()) or square root (sqrt()) transformation. 
+#I suggest you create new variables in the squid dataframe for your transformed variables
+squid$weight_log <- log(squid$weight)
+par(mfrow=c(1,1))
+plot(x=squid$DML, y=squid$weight_log)
+#that looks a bit different!
+
+#let's try the lm again
+lm2 <- lm(weight_log ~ DML, data=squid)
+summary(lm2)
+
+par(mfrow=c(2,2))
+plot(lm2)
+#that's a bit better!
+#they are still not perfect but real data is rarely perfect! we have made it better and can accept assumptions of linear models
+
+#we can try the square root
+squid$weight_sqrt <- sqrt(squid$weight)
+par(mfrow=c(1,1))
+plot(x=squid$DML, y=squid$weight_sqrt)
+#that looks a bit different!
+
+#let's try the lm again
+lm3 <- lm(weight_sqrt ~ DML, data=squid)
+summary(lm3)
+
+par(mfrow=c(2,2))
+plot(lm3)
+
+#this might be the best transformation so let's plot the data with the linear model
+par(mfrow=c(1,1))
+plot(weight_sqrt ~ DML, data=squid)
+lines(x=squid$DML, y=summary(lm3)$coefficients[1] +summary(lm3)$coefficients[2]*squid$DML, col="red")
+mtext(paste("Adj R2= ", round(summary(lm3)$adj.r.squared,digits=2) ,sep=""), side=1, line=-2, adj=1)
 
 
 ##### USING GGPLOT2 ########
