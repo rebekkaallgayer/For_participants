@@ -1,14 +1,14 @@
-##Data exploration and Visualisation 
+#Data exploration and Visualisation 
 #Material written by Dr. Alex Douglas at Aberdeen University
 #you can find the instructions here: https://alexd106.github.io/QUADstatR/exercise_4.html for more details and background
-
+getwd()
 #set your working directory
-setwd() #this is the path to where you have stored the data
+setwd("C:/Users/Rey/Documents/Indonesia workshop/For_participants") #this is the path to where you have stored the data
 #for example, if you saved your data in Documents/workshop, your path would be "C:\Documents\workshop"
 
 #this first section is covering basic plots in base R
 
-
+read.table()
 #Import the ‘squid1.txt’ file into R using the read.table() function and assign it to a variable named squid. 
 squid <- read.table("squid1.txt", header=T)
 #if you get errors here, you might not have set the working directory properly, ask a neighbour or raise your hand!
@@ -99,8 +99,8 @@ dotchart(squid$ovary.weight, main="ovary weight")
 #create histograms for the variables; DML, weight, eviscerate.weight and ovary.weight using the hist() function
 
 par(mfrow=c(2,2))
-hist(squid$DML, main="DML")
-hist(squid$weight, main="Weight")
+hist(squid$DML, main="DML", xlab="DML")
+hist(squid$weight, main="Weight", xlab="Weight")
 hist(squid$eviscerate.weight, main="Eviscerate.weight")
 hist(squid$ovary.weight, main="Ovary.weight")
 
@@ -110,7 +110,7 @@ hist(squid$ovary.weight, main="Ovary.weight")
 #Scatterplots are great for visualising relationships between two continuous variables. 
 #Plot the relationship between DML on the x axis and weight on the y axis. 
 par(mfrow=c(1,1))
-plot(x=squid$DML, y=squid$weight)
+plot(x=squid$DML, y=squid$weight, xlab="DML", ylab="weight")
 
 #How would you describe this relationship? Is it linear? 
 
@@ -229,3 +229,4 @@ ggsave("boxplot_DML.jpeg", box_figure, device="jpeg", dpi=1500 )
 #the dpi is "dots per inch" and is your resolution. journals require high res images
 #you can change jpeg to png if you want too!
 
+#you can explore all the possible layers in ggplot2 here : https://ggplot2.tidyverse.org/reference/index.html

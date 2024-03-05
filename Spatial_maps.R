@@ -26,7 +26,6 @@ plot(indo_1)
 indo_2<- vect("gadm41_IDN_shp/gadm41_IDN_2.shp")
 plot(indo_2)
 
-#etc
 
 ##we will continue on with indo_0
 #to make our lives easier, we turn this into an sf object
@@ -41,9 +40,8 @@ indo_sf <- st_as_sf(indo_0)
 figure1 <-  #we name our plot so that we can call it at any time
   
   ggplot() + #this is the basic ggplot object. you need to call this anytime you make a new ggplot
-  
-  #the + here is very important! This is how you add elements to your plot
-  #so here, we are saying "make a ggplot object" AND take data from indo_0, with these colours
+            #the + here is very important! This is how you add elements to your plot
+             #so here, we are saying "make a ggplot object" AND take data from indo_0, with these colours
   geom_sf(data = indo_sf, # sf format
           color = "black",
           fill = "gray90"
