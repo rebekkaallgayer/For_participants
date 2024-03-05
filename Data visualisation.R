@@ -198,10 +198,17 @@ mtext(paste("Adj R2= ", round(summary(lm3)$adj.r.squared,digits=2) ,sep=""), sid
 install.packages("ggplot2")
 library("ggplot2")
 
-hist_figure <- ggplot(squid, aes(x=DML)) + #we name our plot so that we can call it at any time
+# hist_figure <- 
+  
+  ggplot(squid, aes(x=DML)) + #we name our plot so that we can call it at any time
                                            #the + here is very important! This is how you add elements to your plot
   geom_histogram() +                        #so here, we are saying "make a ggplot object" AND create a histogram from the data
   labs(title="DML", x="DML", y="Frequency") #AND give it particular labels
+
+hist_figure <- ggplot(squid, aes(x=DML)) + 
+  geom_histogram() +                        
+  labs(title="DML", x="DML", y="Frequency")
+
 
 #this is how you build up a ggplot object, piece by piece
   
@@ -218,7 +225,8 @@ plot(hist_4)
 #create a boxplot
 box_figure<- ggplot(squid, aes(x=maturity.stage_f, y=DML)) +
   geom_boxplot() +
-  theme_minimal()
+  theme_minimal() +
+  labs(x=, y=)
 
 plot(box_figure)
 

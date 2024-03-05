@@ -2,9 +2,11 @@
 
 #libraries
 install.packages("terra")
+install.packages("sf")
 #install.packages("ggplot2")
 library("terra")
 library("ggplot2")
+library("sf")
 #you can explore all the possible layers in ggplot2 here : https://ggplot2.tidyverse.org/reference/index.html
 
 #set your working directory
@@ -71,9 +73,9 @@ plot(figure2)
 
 figure3 <- figure2 + #take figure2 AND edit the axes
   
-  scale_x_continuous(labels = ~ paste0(.x, "°", "N")) + #the scale_x_continuous() object will edit the x axis
+  scale_y_continuous(labels = ~ paste0(.x, "°", "N")) + #the scale_x_continuous() object will edit the x axis
   
-  scale_y_continuous(labels = ~ paste0(.x, "°", "E")) #the scale_y_continuous() object will edit the y axis
+  scale_x_continuous(labels = ~ paste0(.x, "°", "E")) #the scale_y_continuous() object will edit the y axis
 
 plot(figure3)
   
@@ -104,7 +106,7 @@ figure5 <- figure4 +
   geom_point(data = sites,
              aes(x = Long,
                  y = Lat),
-             size = 5, #how big are the dots?
+             size = 2, #how big are the dots?
              shape = 21, #21 is the code for dots
              fill = "black" #colour
   )
@@ -190,8 +192,39 @@ figure7 <- figure6 +
                 align_to = "full"
   )
 
+
+figure7 <- figure6 +
+  inset_element(inset_map,
+                left = 0.75,
+                bottom = 0.7,
+                right = 1,
+                top = 1,
+                align="plot"
+  )
+
   plot(figure7)
 
 #and save!
 ggsave("Java_insert.jpeg", figure7, device="jpeg", dpi=1500 )
 #remember to change it to figure7!! and to change the name of the file, otherwise it will overwrite the previous one
+
+java_ext<- ext(100,130,-11,-5)
+java_crop <- crop(indo_0,java_ext)
+plot(java_crop)
+
+###
+
+
+new_fig<-  #we name our plot so that we can call it at any time
+  
+  ggplot() + #this is the basic ggplot object. you need to call this anytime you make a new ggplot
+  #the + here is very important! This is how you add elements to your plot
+  #so here, we are saying "make a ggplot object" AND take data from indo_0, with these colours
+  geom_sf(data = indo_sf, # sf format
+          color = "black",
+          fill = "gray90"
+  )+
+  coord_sf(xlim = c(100, 130), #x axis coordinates (longitude)
+           ylim = c(-11, -5), #y axis coordinates (latitude)
+           expand = FALSE) +
+  
