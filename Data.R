@@ -99,26 +99,5 @@ write.csv(squid.200.sub, file ="Squid_200_stage2.csv", quote=FALSE)
 #you can do simple stats on the columns
 mean(squid$DML)
 
-#a skill that makes you very flexible for data manipulation is for loops
-#this means 
-
-#the general form of the for loop goes something like:
-  
-# for(each of these values){
-#     do the commands between the curly brackets
-# }
-
-#let's visualise this:
-
-for(i in 1:10){
-  print(i)
-}
-#i is what we call an 'iterator', it will iterate over 1:10
-#this can be called anything!
-
-for(cloud in 1:10){
-  print(cloud)
-}
-#it doesn't matter what you call it
-
-#you can use this to go through your data
+##try reading in your own data and play with it for a while! 
+##start here with your own code, don't change the code above!
