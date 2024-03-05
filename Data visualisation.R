@@ -8,7 +8,6 @@ setwd("C:/Users/Rey/Documents/Indonesia workshop/For_participants") #this is the
 
 #this first section is covering basic plots in base R
 
-read.table()
 #Import the ‘squid1.txt’ file into R using the read.table() function and assign it to a variable named squid. 
 squid <- read.table("squid1.txt", header=T)
 #if you get errors here, you might not have set the working directory properly, ask a neighbour or raise your hand!
