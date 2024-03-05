@@ -5,12 +5,11 @@ install.packages("terra")
 #install.packages("ggplot2")
 library("terra")
 library("ggplot2")
-
+#you can explore all the possible layers in ggplot2 here : https://ggplot2.tidyverse.org/reference/index.html
 
 #set your working directory
 setwd() #this is the path to where you have stored the data
 #for example, if you saved your data in Documents/workshop, your path would be "C:\Documents\workshop"
-setwd("C:/Users/Rey/Documents/Indonesia workshop/For_participants/")
 
 ##read in a shape file and plot in terra
 #the map of Indonesia came from https://gadm.org/download_country.html
